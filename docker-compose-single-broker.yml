@@ -1,0 +1,21 @@
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    network_mode: host
+  kafka:
+    build: .
+    ports:
+      - "9092:9092"
+      - "1100:1100"
+      - "1099:1099"
+    network_mode: host
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ibus
+      KAFKA_CREATE_TOPICS: "test:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+      EXTRA_ARGS: "-javaagent:/usr/bin/jmx_prometheus_javaagent.jar=1100:/usr/bin/kafka.yml"
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock
