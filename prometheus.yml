@@ -1,0 +1,23 @@
+version: "3.2"
+volumes:
+    prometheus_data: {}
+services:
+  prometheus:
+    image: prom/prometheus
+    network_mode: host
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+  grafana:
+    image: grafana/grafana
+    network_mode: host
+    ports:
+      - 3000:3000/tcp
+    
